@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { auth } from "@/lib/firebase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -19,8 +19,8 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password)
       router.push("/dashboard")
-    } catch (error) {
-      setError("Error al iniciar sesión. Por favor, verifica tus credenciales.")
+    } catch (error: any) {
+      setError(error.message)
     }
   }
 
