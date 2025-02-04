@@ -44,7 +44,7 @@ export default function PerfilPage() {
     } else if (user) {
       fetchUserProfile()
     }
-  }, [user, loading, router])
+  }, [user, loading, router, fetchUserProfile])
 
   const fetchUserProfile = async () => {
     if (!user) return
