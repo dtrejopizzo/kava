@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { collection, query, where, getDocs, getDoc, doc, updateDoc, deleteDoc, addDoc } from "firebase/firestore"
 import { db, auth } from "@/lib/firebase"
 import { useAuthState } from "react-firebase-hooks/auth"
@@ -31,13 +31,7 @@ export function ReservasList({ onReservaUpdated }: ReservasListProps) {
   const [user] = useAuthState(auth)
   const [reservas, setReservas] = useState<Reserva[]>([])
 
-  useEffect(() => {
-    if (user) {
-      fetchReservas()
-    }
-  }, [user])
-
-  const fetchReservas = async () => {
+  const fetchReservas = useCallback(async () => {
     if (!user) return
 
     const reservasCollection = collection(db, "reservas")
@@ -56,7 +50,13 @@ export function ReservasList({ onReservaUpdated }: ReservasListProps) {
     })
 
     setReservas(reservasList)
-  }
+  }, [user])
+
+  useEffect(() => {
+    if (user) {
+      fetchReservas()
+    }
+  }, [user, fetchReservas])
 
   const handleCancelReserva = async (reservaId: string) => {
     try {
