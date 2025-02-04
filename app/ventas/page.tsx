@@ -47,7 +47,7 @@ export default function VentasPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [searchField, setSearchField] = useState<"sku" | "autor" | "producto">("sku")
   const [saleItems, setSaleItems] = useState<SaleItem[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  //const [isLoading, setIsLoading] = useState(true) // Removed unused state
   const [user, loading] = useAuthState(auth)
   const [exchangeRate, setExchangeRate] = useState<number>(0)
 
@@ -76,7 +76,7 @@ export default function VentasPage() {
   }
 
   const fetchStockItems = async () => {
-    setIsLoading(true)
+    //setIsLoading(true) // Removed from here
     const stockCollection = collection(db, "stock")
     const querySnapshot = await getDocs(stockCollection)
     const items: StockItem[] = []
@@ -94,7 +94,7 @@ export default function VentasPage() {
       } as StockItem)
     })
     setStockItems(items)
-    setIsLoading(false)
+    //setIsLoading(false) // Removed from here
   }
 
   const filteredItems = stockItems
@@ -160,7 +160,8 @@ export default function VentasPage() {
       return
     }
     try {
-      const reservaRef = await addDoc(collection(db, "reservas"), {
+      //const reservaRef = await addDoc(collection(db, "reservas"), { //Removed unused variable
+      await addDoc(collection(db, "reservas"), {
         items: saleItems.map((item) => ({
           id: item.id,
           sku: item.sku,
