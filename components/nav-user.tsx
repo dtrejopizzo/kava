@@ -7,8 +7,7 @@ import { auth } from "@/lib/firebase"
 import { useState, useEffect } from "react"
 import { doc, getDoc } from "firebase/firestore"
 import { db } from "@/lib/firebase"
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserAvatar } from "./user-avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +23,6 @@ interface User {
   id: string
   name: string
   email: string
-  avatar: string
 }
 
 export function NavUser({
@@ -41,7 +39,7 @@ export function NavUser({
       if (user.id) {
         const userDoc = await getDoc(doc(db, "users", user.id))
         if (userDoc.exists()) {
-          const userData = userDoc.data() as any //add type assertion here
+          const userData = userDoc.data() as { nombre?: string; email?: string }
           setProfile({
             ...user,
             name: userData.nombre || user.name,
@@ -72,10 +70,7 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={profile.avatar} alt={profile.name} />
-                <AvatarFallback className="rounded-lg">{profile.name.charAt(0)}</AvatarFallback>
-              </Avatar>
+              <UserAvatar name={profile.name} email={profile.email} className="h-8 w-8 rounded-lg" />
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{profile.name}</span>
                 <span className="truncate text-xs">{profile.email}</span>
@@ -91,10 +86,7 @@ export function NavUser({
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={profile.avatar} alt={profile.name} />
-                  <AvatarFallback className="rounded-lg">{profile.name.charAt(0)}</AvatarFallback>
-                </Avatar>
+                <UserAvatar name={profile.name} email={profile.email} className="h-8 w-8 rounded-lg" />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{profile.name}</span>
                   <span className="truncate text-xs">{profile.email}</span>
